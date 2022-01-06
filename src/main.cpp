@@ -3,15 +3,6 @@
 
 #include <music.h>
 
-// Button map when looking at 3 buttons with screen facing up
-// button 1 - a innermost
-// button 2 - b between 1a and 3c
-// button 3 - c outermost edge
-
-constexpr int k_ISRDebounceMs = 200;
-
-// ISRs signature: no input, void return
-void ISRPlayPause();
 TFT_eSPI g_tft;
 
 constexpr uint32_t k_landscape_width{TFT_HEIGHT}; //320
@@ -30,19 +21,9 @@ void displayLineCentered(const char* str, const uint32_t currentLineIndex, const
     g_tft.drawString(str, final_width, final_height);
 }
 
-static bool g_isPlaying = true;
-static int g_playerPosition = 0;
-
 void setup()
 {
-    //set buzzer pin as output
-    pinMode(BUZZER_PIN, OUTPUT);
-
-    Serial.begin(115200);
-    pinMode(WIO_KEY_A, INPUT_PULLUP);
-    pinMode(WIO_KEY_B, INPUT_PULLUP);
-    pinMode(WIO_KEY_C, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(WIO_KEY_A), ISRPlayPause, LOW);
+    setupMusic();
 
     g_tft.begin();
     //g_tft.setRotation(1); // for development
@@ -88,45 +69,8 @@ void setup()
     g_tft.fillRect(215, 165, 6, 10, TFT_RED);
 }
 
-void playMusic()
-{
-    if (!g_isPlaying) return;
-
-    int& i = g_playerPosition;
-
-    for(; i < k_musicLength; i++) {
-        if (!g_isPlaying) break;
-
-        const Tune& t = k_music[i];
-        if(*t.note == ' ') {
-            delay(t.beat * k_tempo);
-        }
-        else {
-            playNote(*t.note, t.beat * k_tempo);
-        }
-
-        delay(k_tempo / 2); // delay between notes
-    }
-
-    if (i >= k_musicLength) i = 0;
-
-    delay(k_tempo * 3);
-}
-
 void loop()
 {
     playMusic();
-}
-
-void ISRPlayPause()
-{
-    static unsigned long last_interrupt_time = 0;
-    const unsigned long interrupt_time = millis();
-    // If interrupts come faster than k_ISRDebounceMs, assume it's a bounce and ignore
-    if (interrupt_time - last_interrupt_time > k_ISRDebounceMs)
-    {
-        g_isPlaying = !g_isPlaying;
-    }
-    last_interrupt_time = interrupt_time;
 }
 

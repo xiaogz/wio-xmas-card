@@ -1,6 +1,9 @@
-#include <SPI.h>
-
 #include <music.h>
+
+#include <SPI.h>
+#include <Wire.h>
+
+#define BUZZER_PIN WIO_BUZZER /* sig pin of the buzzer */
 
 //  timeHigh = period / 2 = 1 / (2 * toneFrequency) * 10^6
 //  note    frequency    period    timeHigh
@@ -9,6 +12,13 @@
 //  b       493 Hz       2028       1014
 //  c       523 Hz       1912        956
 //  d       587 Hz       1703        851
+
+// used by playNote()
+struct Note
+{
+    const char* name;
+    const int tone;
+};
 
 #define N(name, tone) { #name, tone },
 constexpr Note k_noteTable[] = {
@@ -20,12 +30,19 @@ constexpr Note k_noteTable[] = {
 };
 #undef N
 
+struct Tune
+{
+    const char* note; // using preprocessor # forces type to const char*
+    const int beat;
+};
+
 #define T(note, beat) { #note, beat },
 // base beat length is one 16th note
 #define T1(note) { #note, 1 },
 // most tunes use one quarter note
 #define T4(note) { #note, 4 },
 
+// jingle bells
 constexpr Tune k_music[] = {
     T4(b)
     T4(b)
@@ -67,6 +84,10 @@ constexpr Tune k_music[] = {
 
 constexpr int k_musicLength = sizeof(k_music) / sizeof(k_music[0]);
 constexpr int k_tempo = 75;
+constexpr int k_ISRDebounceMs = 200;
+
+static bool g_isPlaying = true;
+static int g_playerPosition = 0;
 
 void emitSound(const int tone, const int duration)
 {
@@ -87,5 +108,59 @@ void playNote(const char note, const int duration)
             emitSound(n.tone, duration);
         }
     }
+}
+
+// ISRs signature: no input, void return
+void ISRPlayPause()
+{
+    static unsigned long last_interrupt_time = 0;
+    const unsigned long interrupt_time = millis();
+    // If interrupts come faster than k_ISRDebounceMs, assume it's a bounce and ignore
+    if (interrupt_time - last_interrupt_time > k_ISRDebounceMs)
+    {
+        g_isPlaying = !g_isPlaying;
+    }
+    last_interrupt_time = interrupt_time;
+}
+
+void playMusic()
+{
+    if (!g_isPlaying) return;
+
+    int& i = g_playerPosition;
+
+    for(; i < k_musicLength; i++) {
+        if (!g_isPlaying) break;
+
+        const Tune& t = k_music[i];
+        if(*t.note == ' ') {
+            delay(t.beat * k_tempo);
+        }
+        else {
+            playNote(*t.note, t.beat * k_tempo);
+        }
+
+        delay(k_tempo / 2); // delay between notes
+    }
+
+    if (i >= k_musicLength) i = 0;
+
+    delay(k_tempo * 3);
+}
+
+void setupMusic()
+{
+    // activate sound output
+    pinMode(BUZZER_PIN, OUTPUT);
+
+    // Button map when looking at 3 buttons with screen facing up
+    // button 1 - a innermost
+    // button 2 - b between 1a and 3c
+    // button 3 - c outermost edge
+
+    // enable middle button to pause music
+    Serial.begin(115200);
+    pinMode(WIO_KEY_A, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(WIO_KEY_A), ISRPlayPause, LOW);
 }
 
