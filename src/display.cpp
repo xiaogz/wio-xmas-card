@@ -18,28 +18,31 @@ void displayLineCentered(const char* str, const uint32_t currentLineIndex, const
     g_tft.drawString(str, final_width, final_height);
 }
 
-void draw()
+void drawMug()
 {
+    constexpr int k_mugTopCornerX = 200;
+    constexpr int k_mugTopCornerY = 185;
+
     // outer mug handle
-    g_tft.drawCircle(225, 205, 15, TFT_YELLOW);
-    g_tft.fillCircle(225, 205, 15, TFT_YELLOW);
+    g_tft.drawCircle(k_mugTopCornerX + 25, k_mugTopCornerY + 20, 15, TFT_YELLOW);
+    g_tft.fillCircle(k_mugTopCornerX + 25, k_mugTopCornerY + 20, 15, TFT_YELLOW);
     // inner mug handle
-    g_tft.drawCircle(225, 205, 5, TFT_YELLOW);
-    g_tft.fillCircle(225, 205, 5, TFT_RED);
+    g_tft.drawCircle(k_mugTopCornerX + 25, k_mugTopCornerY + 20, 5, TFT_YELLOW);
+    g_tft.fillCircle(k_mugTopCornerX + 25, k_mugTopCornerY + 20, 5, TFT_RED);
     // mug
-    g_tft.drawRect(200, 185, 25, 45, TFT_YELLOW);
-    g_tft.fillRect(200, 185, 25, 45, TFT_YELLOW);
+    g_tft.drawRect(k_mugTopCornerX, k_mugTopCornerY, 25, 45, TFT_YELLOW);
+    g_tft.fillRect(k_mugTopCornerX, k_mugTopCornerY, 25, 45, TFT_YELLOW);
 
     // left steam line
-    g_tft.drawCircle(205, 180, 5, TFT_WHITE);
-    g_tft.fillRect(205, 175, 6, 10, TFT_RED);
-    g_tft.drawCircle(205, 170, 5, TFT_WHITE);
-    g_tft.fillRect(200, 165, 6, 10, TFT_RED);
+    g_tft.drawCircle(k_mugTopCornerX + 5, k_mugTopCornerY - 5, 5, TFT_WHITE);
+    g_tft.fillRect(k_mugTopCornerX + 5, k_mugTopCornerY - 10, 6, 10, TFT_RED);
+    g_tft.drawCircle(k_mugTopCornerX + 5, k_mugTopCornerY - 15, 5, TFT_WHITE);
+    g_tft.fillRect(k_mugTopCornerX, k_mugTopCornerY - 20, 6, 10, TFT_RED);
     // right steam line
-    g_tft.drawCircle(220, 180, 5, TFT_WHITE);
-    g_tft.fillRect(220, 175, 6, 10, TFT_RED);
-    g_tft.drawCircle(220, 170, 5, TFT_WHITE);
-    g_tft.fillRect(215, 165, 6, 10, TFT_RED);
+    g_tft.drawCircle(k_mugTopCornerX + 20, k_mugTopCornerY - 5, 5, TFT_WHITE);
+    g_tft.fillRect(k_mugTopCornerX + 20, k_mugTopCornerY - 10, 6, 10, TFT_RED);
+    g_tft.drawCircle(k_mugTopCornerX + 20, k_mugTopCornerY - 15, 5, TFT_WHITE);
+    g_tft.fillRect(k_mugTopCornerX + 15, k_mugTopCornerY - 20, 6, 10, TFT_RED);
 }
 
 void setupDisplay()
@@ -66,6 +69,6 @@ void setupDisplay()
         displayLineCentered(strArray[i], i, arraySize);
     }
 
-    draw();
+    drawMug();
 }
 
