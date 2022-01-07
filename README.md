@@ -6,16 +6,16 @@ to more cool stuff!
 
 ## Setup
 - hardware:
--- [Wio Terminal](https://www.seeedstudio.com/Wio-Terminal-p-4509.html)
+  - [Wio Terminal](https://www.seeedstudio.com/Wio-Terminal-p-4509.html)
 - IDE:
--- [Visual Studio Code](https://code.visualstudio.com/)
--- [PlatformIO IDE](https://docs.platformio.org/en/latest//integration/ide/vscode.html#installation) (visual studio code extension)
+  - [Visual Studio Code](https://code.visualstudio.com/)
+  - [PlatformIO IDE](https://docs.platformio.org/en/latest//integration/ide/vscode.html#installation) (visual studio code extension)
 - Steps:
--- Connect Wio Terminal to computer.
--- Turn on Wio Terminal (flick the side switch to middle).
--- Open root folder in Visual Studio and install PlatformIO extension.
--- Ctrl + Shift + U to build and upload binary to Wio Terminal.
--- You can press the middle blue button on top of the screen to pause the music.
+  - Connect Wio Terminal to computer.
+  - Turn on Wio Terminal (flick the side switch to middle).
+  - Open root folder in Visual Studio and install PlatformIO extension.
+  - Ctrl + Shift + U to build and upload binary to Wio Terminal.
+  - You can press the middle blue button on top of the screen to pause the music.
 
 ## License
 This uses MIT License.
