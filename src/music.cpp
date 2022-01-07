@@ -5,7 +5,7 @@
 
 #define BUZZER_PIN WIO_BUZZER /* sig pin of the buzzer */
 
-//  timeHigh = period / 2 = 1 / (2 * toneFrequency) * 10^6
+//  timeHigh = period / 2 = 1 / (2 * frequency) * 10^6
 //  note    frequency    period    timeHigh
 //  g       392 Hz       2550       1275
 //  a       440 Hz       2272       1136
@@ -17,10 +17,10 @@
 struct Note
 {
     const char* name;
-    const int tone;
+    const int timeHigh;
 };
 
-#define N(name, tone) { #name, tone },
+#define N(name, timeHigh) { #name, timeHigh },
 constexpr Note k_noteTable[] = {
     N(g, 1275)
     N(a, 1136)
@@ -89,13 +89,13 @@ constexpr int k_ISRDebounceMs = 200;
 static bool g_isPlaying = true;
 static int g_playerPosition = 0;
 
-void emitSound(const int tone, const int duration)
+void emitSound(const int timeHigh, const int duration)
 {
-    for (long i = 0; i < duration * 1000L; i += tone * 2) {
+    for (long i = 0; i < duration * 1000L; i += timeHigh * 2) {
         digitalWrite(BUZZER_PIN, HIGH);
-        delayMicroseconds(tone);
+        delayMicroseconds(timeHigh);
         digitalWrite(BUZZER_PIN, LOW);
-        delayMicroseconds(tone);
+        delayMicroseconds(timeHigh);
     }
 }
 
@@ -105,7 +105,7 @@ void playNote(const char note, const int duration)
     for (uint32_t i = 0; i < sizeof(k_noteTable) / sizeof(k_noteTable[0]); i++) {
         const Note& n = k_noteTable[i];
         if (*n.name == note) {
-            emitSound(n.tone, duration);
+            emitSound(n.timeHigh, duration);
         }
     }
 }
