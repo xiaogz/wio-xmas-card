@@ -4,8 +4,8 @@ a small message. I hacked it for my wife for Christmas. Now I cleaned it up
 a bit. Hope this can be used by other Wio Terminal tinkerers as a spring board
 to more cool stuff!
 
-## Demo pic
-![Wio Terminal Christmas Card Picture](./demo.jpeg)
+## Demo
+[![Wio Terminal Christmas Card](./demo.jpeg)](./Wio-Xmas-Github.mp4)
 
 ## Setup
 - hardware:
