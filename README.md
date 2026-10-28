@@ -5,7 +5,7 @@ a bit. Hope this can be used by other Wio Terminal tinkerers as a spring board
 to more cool stuff!
 
 ## Demo
-[![Wio Terminal Christmas Card](./demo.jpeg)](./Wio-Xmas-Github.mp4)
+<https://github.com/user-attachments/assets/2b240c23-78a5-4551-bac6-1eb27dd801f3>
 
 ## Setup
 - hardware:
