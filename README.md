@@ -4,7 +4,7 @@ a small message. I hacked it for my wife for Christmas. Now I cleaned it up
 a bit. Hope this can be used by other Wio Terminal tinkerers as a spring board
 to more cool stuff!
 
-## Demo
+## Demo (unmute to hear the music!)
 <https://github.com/user-attachments/assets/2b240c23-78a5-4551-bac6-1eb27dd801f3>
 
 ## Setup
